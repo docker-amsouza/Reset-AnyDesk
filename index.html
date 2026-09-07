@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+  body {
+    background: rgba(0, 0, 0, 0.75); /* Fundo escuro para aparecer! */
+    color: #FFFFFF; /* Branco bem forte */
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000000;
+    margin: 0;
+    padding: 15px;
+  }
+  .meta { color: #FFD700; } /* Dourado */
+  .falta { color: #FF6B6B; } /* Vermelho claro */
+  .recebido { color: #4ADE80; } /* Verde */
+  .link { color: #93C5FD; font-size: 16px; margin-top: 10px; }
+  .completo { color: #FFD700; font-size: 24px; margin-top: 10px; display: none; }
+</style>
+</head>
+<body>
+
+<div class="meta">🎯 META: R$ 100,00</div>
+<div class="recebido">✅ RECEBIDO: <span id="recebido">R$ 17,77</span></div>
+<div class="falta">❌ FALTA: <span id="falta">R$ 82,23</span></div>
+<div class="completo" id="concluido">🎉 META CONCLUÍDA! PARABÉNS! 🎉</div>
+<div class="link">🔗 streamvip.com/amsouza</div>
+
+<script>
+// ==================================================
+// ✅ É SÓ DIGITAR O VALOR AQUI E SALVAR!
+// ==================================================
+let valorRecebido = 17.77;
+const META = 100;
+
+function atualizarValores() {
+  const falta = META - valorRecebido;
+  document.getElementById("recebido").textContent = 
+    "R$ " + valorRecebido.toFixed(2).replace(".", ",");
+  document.getElementById("falta").textContent = 
+    "R$ " + falta.toFixed(2).replace(".", ",");
+  
+  if (valorRecebido >= META) {
+    document.getElementById("falta").style.display = "none";
+    document.getElementById("concluido").style.display = "block";
+  }
+}
+
+atualizarValores();
+</script>
+
+</body>
+</html>
