@@ -2,10 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
 <style>
   body {
-    background: rgba(0, 0, 0, 0.75); /* Fundo escuro para aparecer! */
-    color: #FFFFFF; /* Branco bem forte */
+    background: rgba(0, 0, 0, 0.75);
+    color: #FFFFFF;
     font-family: Arial, sans-serif;
     font-size: 22px;
     font-weight: bold;
@@ -13,41 +14,122 @@
     margin: 0;
     padding: 15px;
   }
-  .meta { color: #FFD700; } /* Dourado */
-  .falta { color: #FF6B6B; } /* Vermelho claro */
-  .recebido { color: #4ADE80; } /* Verde */
-  .link { color: #93C5FD; font-size: 16px; margin-top: 10px; }
-  .completo { color: #FFD700; font-size: 24px; margin-top: 10px; display: none; }
+
+  .meta {
+    color: #FFD700;
+  }
+
+  .falta {
+    color: #FF6B6B;
+  }
+
+  .recebido {
+    color: #4ADE80;
+  }
+
+  .completo {
+    color: #FFD700;
+    font-size: 24px;
+    margin-top: 10px;
+    display: none;
+  }
+
+  .erro {
+    color: #FF6B6B;
+    font-size: 14px;
+    display: none;
+  }
 </style>
+
 </head>
+
 <body>
 
-<div class="meta">🎯 META: R$ 100,00</div>
-<div class="recebido">✅ RECEBIDO: <span id="recebido">R$ 17,77</span></div>
-<div class="falta">❌ FALTA: <span id="falta">R$ 82,23</span></div>
-<div class="completo" id="concluido">🎉 META CONCLUÍDA! PARABÉNS! 🎉</div>
+<div class="meta">
+  🎯 META: R$ 100,00
+</div>
+
+<div class="recebido">
+  ✅ RECEBIDO: <span id="recebido">Carregando...</span>
+</div>
+
+<div class="falta" id="linhaFalta">
+  ❌ FALTA: <span id="falta">Carregando...</span>
+</div>
+
+<div class="completo" id="concluido">
+  🎉 META CONCLUÍDA! PARABÉNS! 🎉
+</div>
+
+<div class="erro" id="erro">
+  Não foi possível atualizar o saldo.
+</div>
 
 <script>
-// ==================================================
-// ✅ É SÓ DIGITAR O VALOR AQUI E SALVAR!
-// ==================================================
-let valorRecebido = 17.77;
+
 const META = 100;
 
-function atualizarValores() {
-  const falta = META - valorRecebido;
-  document.getElementById("recebido").textContent = 
-    "R$ " + valorRecebido.toFixed(2).replace(".", ",");
-  document.getElementById("falta").textContent = 
-    "R$ " + falta.toFixed(2).replace(".", ",");
-  
-  if (valorRecebido >= META) {
-    document.getElementById("falta").style.display = "none";
-    document.getElementById("concluido").style.display = "block";
+async function atualizarSaldo() {
+
+  try {
+
+    /*
+      A URL da API/serviço que vamos criar
+      será colocada aqui.
+    */
+
+    const resposta = await fetch("URL_DO_SEU_SERVICO");
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao consultar saldo");
+    }
+
+    const dados = await resposta.json();
+
+    const valorRecebido = Number(dados.saldo);
+
+    const falta = Math.max(0, META - valorRecebido);
+
+    document.getElementById("recebido").textContent =
+      "R$ " + valorRecebido.toFixed(2).replace(".", ",");
+
+    document.getElementById("falta").textContent =
+      "R$ " + falta.toFixed(2).replace(".", ",");
+
+    document.getElementById("erro").style.display = "none";
+
+    if (valorRecebido >= META) {
+
+      document.getElementById("linhaFalta").style.display = "none";
+
+      document.getElementById("concluido").style.display = "block";
+
+    } else {
+
+      document.getElementById("linhaFalta").style.display = "block";
+
+      document.getElementById("concluido").style.display = "none";
+
+    }
+
+  } catch (erro) {
+
+    console.error(erro);
+
+    document.getElementById("erro").style.display = "block";
+
   }
+
 }
 
-atualizarValores();
+
+// Atualiza ao abrir
+atualizarSaldo();
+
+
+// Atualiza a cada 30 segundos
+setInterval(atualizarSaldo, 30000);
+
 </script>
 
 </body>
