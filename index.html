@@ -4,115 +4,96 @@
 <meta charset="UTF-8">
 <style>
   body {
-    background: linear-gradient(135deg, #0c0c0c 0%, #1a0000 50%, #0c0c0c 100%);
-    color: #FFFFFF;
-    font-family: 'Arial Black', Arial, sans-serif;
-    font-size: 24px;
-    font-weight: bold;
     margin: 0;
-    padding: 30px 25px;
-    min-height: 100vh;
-    box-sizing: border-box;
+    padding: 10px;
+    background: transparent;
+    font-family: 'Arial Black', Arial, sans-serif;
   }
-
-  /* Caixa principal com borda e brilho Redragon */
   .caixa {
-    border: 3px solid #cc0000;
-    border-radius: 12px;
-    padding: 25px 30px;
-    background: rgba(20, 0, 0, 0.85);
-    box-shadow: 0 0 20px #cc0000, inset 0 0 15px rgba(204, 0, 0, 0.35);
-    max-width: 420px;
-    margin: 0 auto;
+    position: fixed;
+    top: 8px;
+    left: 8px;
+    border: 2px solid #cc0000;
+    border-radius: 10px;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.60);
+    box-shadow: 0 0 12px #cc0000, inset 0 0 8px rgba(204, 0, 0, 0.25);
+    max-width: 220px;
+    color: #fff;
+    font-size: 13px;
+    z-index: 9999;
   }
-
   .meta { 
     color: #ffd700; 
-    font-size: 26px;
-    text-shadow: 0 0 8px #ffd700;
-    border-bottom: 2px solid #330000;
-    padding-bottom: 10px;
+    font-size: 14px;
+    text-shadow: 0 0 4px #ffd700;
+    margin-bottom: 6px;
   }
   .falta { 
     color: #ff4d4d; 
-    font-size: 24px;
-    text-shadow: 0 0 6px #ff4d4d;
+    font-size: 12px;
+    text-shadow: 0 0 3px #ff4d4d;
   }
   .recebido { 
     color: #4ade80; 
-    font-size: 24px;
-    text-shadow: 0 0 6px #4ade80;
-  }
-  .link { 
-    color: #93c5fd; 
-    font-size: 16px; 
-    margin-top: 12px; 
+    font-size: 12px;
+    text-shadow: 0 0 3px #4ade80;
   }
   .completo { 
     color: #ffd700; 
-    font-size: 26px; 
-    margin-top: 15px; 
+    font-size: 13px; 
+    margin-top: 6px;
     display: none;
-    text-shadow: 0 0 12px #ffd700;
+    text-shadow: 0 0 8px #ffd700;
     animation: brilho 1s ease-in-out infinite alternate;
   }
-
-  /* Barra de progresso estilo Redragon */
   .barra-fundo {
-    height: 22px;
+    height: 10px;
     background: #220000;
-    border-radius: 11px;
-    margin: 18px 0;
-    border: 2px solid #cc0000;
+    border-radius: 5px;
+    margin: 6px 0;
+    border: 1px solid #cc0000;
     overflow: hidden;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.8);
   }
   .barra-porcentagem {
     height: 100%;
     background: linear-gradient(90deg, #990000, #ff0000, #ff3333);
-    border-radius: 10px;
+    border-radius: 4px;
     width: 0%;
-    transition: width 0.6s ease-out;
-    box-shadow: 0 0 10px #ff0000;
+    transition: width 0.5s ease-out;
+    box-shadow: 0 0 6px #ff0000;
   }
-
   @keyframes brilho {
-    from { text-shadow: 0 0 8px #ffd700; }
-    to   { text-shadow: 0 0 20px #ffd700, 0 0 30px #ffaa00; }
+    from { text-shadow: 0 0 4px #ffd700; }
+    to   { text-shadow: 0 0 10px #ffd700; }
   }
 </style>
 </head>
 <body>
-
 <div class="caixa">
   <div class="meta">🎯 META: R$ 100,00</div>
-
   <div class="barra-fundo">
     <div class="barra-porcentagem" id="barra"></div>
   </div>
-
   <div class="recebido">✅ RECEBIDO: <span id="recebido">R$ 17,77</span></div>
   <div class="falta">❌ FALTA: <span id="falta">R$ 82,23</span></div>
-  <div class="completo" id="concluido">🎉 META CONCLUÍDA! PARABÉNS! 🎉</div>
+  <div class="completo" id="concluido">🎉 META CONCLUÍDA! 🎉</div>
 </div>
-
 <script>
 // ==================================================
 // ✅ É SÓ DIGITAR O VALOR AQUI E SALVAR!
 // ==================================================
-let valorRecebido = 17.77; // ← Troca pelo valor delas
-const META = 100; // ← Também pode mudar a META se quiser
+let valorRecebido = 17.77; // ← Troca pelo valor
+const META = 100; // ← Pode alterar a meta
 
 function atualizarValores() {
   const falta = META - valorRecebido;
   const porcentagem = Math.min((valorRecebido / META) * 100, 100);
-
+  
   document.getElementById("recebido").textContent = 
     "R$ " + valorRecebido.toFixed(2).replace(".", ",");
   document.getElementById("falta").textContent = 
     "R$ " + falta.toFixed(2).replace(".", ",");
-
-  // Atualiza barra de progresso
   document.getElementById("barra").style.width = porcentagem + "%";
   
   if (valorRecebido >= META) {
@@ -120,12 +101,10 @@ function atualizarValores() {
     document.getElementById("concluido").style.display = "block";
     document.getElementById("barra").style.background = 
       "linear-gradient(90deg, #b8860b, #ffd700, #ffea00)";
-    document.getElementById("barra").style.boxShadow = "0 0 14px #ffd700";
+    document.getElementById("barra").style.boxShadow = "0 0 8px #ffd700";
   }
 }
-
 atualizarValores();
 </script>
-
 </body>
 </html>
